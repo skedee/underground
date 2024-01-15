@@ -12,19 +12,27 @@ Use makefiles and sqitch to managing the database design.
 
 ## SETUP DATABASE
 
-* run make to see command line menu
-    * make
-* create database
-    * make create
+### run make to see command line menu
+
+```
+make
+```
+
+### create database
+
+```
+make create
+```
 
 ## SETUP SCHEMA
 
-* create schema
-    * make create-schema SCHEMA_NAME
-* work with scheam
-    * cd SCEHAM_NAME
-* run make to see command line menu
-    * make
+### create schema
+
+```
+make create-schema SCHEMA_NAME
+cd SCEHAM_NAME
+make
+```
 
 ## VERSION
 
