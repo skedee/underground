@@ -1,6 +1,8 @@
 ## ABOUT
 
-Uses makefiles and sqitch to managing a database
+Use makefiles and sqitch to managing the database design.
+
+(Evolutionary Database Design)[https://martinfowler.com/articles/evodb.html]
 
 ## INSTALL
 
@@ -23,3 +25,17 @@ Uses makefiles and sqitch to managing a database
     * cd SCEHAM_NAME
 * run make to see command line menu
     * make
+
+## VERSION
+
+When adding a new migration (make add) a versioned file will added to the deploy, revert,
+and verify directories.  The makefile scripts will check for the last migration with the
+same name, if found the previous file will be copied to the new version.
+
+```
+make add xyx
+
+001-XYZ.sql # content will be copied to 002-XYZ.sql
+002-ZZZ.sql # filename does not mach xyz
+003-XYZ.sql # new migration added
+```

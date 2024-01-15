@@ -49,10 +49,12 @@ define SQITCH-REVERT
 	sqitch revert
 endef
 
+# remove the sqitch meta database
 define SQITCH-REMOVE
 	sqitch remove db:pg://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
 endef
 
+# remove the database
 define SQITCH-DROP
 	psql -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA $(DB_SCHEMA);"
 endef

@@ -14,10 +14,10 @@ DB_SCHEMA = $(DB_SCHEMA_DEFAULT)
 
 .PHONY: help create drop create-schema remove-schema $(ARG)
 
-create: ## create postgres database
+create: ## create database
 	$(call DB-CREATE)
 
-drop: ## drop postgres database
+drop: ## drop database
 	$(call DB-DROP)
 
 create-schema: ## create sqitch project (schema)
