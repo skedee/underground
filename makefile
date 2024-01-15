@@ -23,14 +23,10 @@ drop: ## drop database
 create-schema: ## create sqitch project (schema)
 	$(call DB-CREATE-SCHEMA)
 
-create-schemas: ## create sqitch project (schemas)
-	$(call DB-CREATE-SCHEMA)
-
-remove-schema: ## remove sqitch project (schema)
+remove-schema: ## remove sqitch project (directories and meta-data)
+	$(call DB-DROP-SCHEMA)
+	$(call DB-DROP-SCHEMA-META)
 	$(call DB-REMOVE-SCHEMA)
-
-remove: ## remove sqitch meta-data from the database
-	$(call SQITCH-REMOVE)
 
 help:
 	$(call PRINT_MENU, "root")

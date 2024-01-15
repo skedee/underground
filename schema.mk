@@ -9,12 +9,13 @@ ARG_UPPER := $(shell echo $(ARG) | tr '[:lower:]' '[:upper:]')
 include ../env.sqitch
 include ../../barons-court/common.mk
 include ../sqitch.mk
+include ../postgres.mk
 
 DB_SCHEMA = $(SQITCH_SCHEMA_DEFAULT)
 
 .PHONY: help init add deploy revert reset $(ARG) $(ARG_UPPER) $(ARG2) $(ARG2_UPPER)
 
-init: ## init sqitch project
+init: ## init the sqitch project (directories and meta-data)
 	$(call SQITCH-INIT)
 
 add: ## create a sqitch migration
@@ -25,6 +26,13 @@ deploy: ## deploy sqitch migrations to the database
 
 revert: ## revert sqitch migrations
 	$(call SQITCH-REVERT)
+
+remove-schema: ## remove sqitch project
+	$(call DB-DROP-SCHEMA, $(shell basename `pwd`))
+	$(call DB-DROP-SCHEMA-META, $(shell basename `pwd`))
+
+remove-schema-meta: ## remove sqitch project (meta-data)
+	$(call DB-DROP-SCHEMA-META, $(shell basename `pwd`))
 
 reset: ## reset sqitch
 	$(call SQITCH-RESET)

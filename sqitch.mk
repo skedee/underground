@@ -16,7 +16,7 @@ ifdef ARG_UPPER
 	endif
 endif
 
-# init the sqitch project
+# init the sqitch project (directories and meta-data)
 define SQITCH-INIT
 	sqitch init $(DB_NAME)
 	echo "sqitch init $(DB_NAME)"
@@ -51,10 +51,10 @@ endef
 
 # remove the sqitch meta database
 define SQITCH-REMOVE
-	sqitch remove db:pg://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
+	sqitch remove db:pg://$(DB_USER):$(PGPASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)
 endef
 
 # remove the database
 define SQITCH-DROP
-	psql -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA $(DB_SCHEMA);"
+	psql -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS DROP $(DB_SCHEMA);"
 endef

@@ -10,7 +10,7 @@ db-create-schema:
 	sed -i "s/@@engine_client/$(SQITCH_ENGINE_CLIENT)/g" $(ARG)/sqitch.conf
 	sed -i "s/@@engine/$(SQITCH_ENGINE)/g" $(ARG)/sqitch.conf
 	sed -i "s/@@db_user/$(DB_USER)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@db_password/$(DB_PASSWORD)"/g $(ARG)/sqitch.conf
+	sed -i "s/@@db_password/$(PGPASSWORD)"/g $(ARG)/sqitch.conf
 	sed -i "s/@@db_host/$(DB_HOST)"/g $(ARG)/sqitch.conf
 	sed -i "s/@@db_port/$(DB_PORT)"/g $(ARG)/sqitch.conf
 	cd $(ARG); \
@@ -28,6 +28,7 @@ define DB-CREATE
 	fi
 endef
 
+# drop the database (forced)
 define DB-DROP
 	@if [ -e $(ARG) ]; then \
 		podman exec -it $(DB_CONTAINER) dropdb -U $(DB_USER) --force $(DB_NAME); \
@@ -38,10 +39,25 @@ define DB-DROP
 	fi
 endef
 
+# drop the schema from the database
 define DB-DROP-SCHEMA
-    psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS sqitch CASCADE"
+	@if [ -z "$(1)" ]; then \
+		psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS $(DB_SCHEMA) CASCADE"; \
+	else \
+		psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS $(strip $(1)) CASCADE"; \
+	fi
 endef
 
+# drop only the sqitch meta-data schema
+define DB-DROP-SCHEMA-META
+	@if [ -z "$(1)" ]; then \
+		psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS sqitch_$(DB_SCHEMA) CASCADE"; \
+	else \
+		psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS sqitch_$(strip $(1)) CASCADE"; \
+	fi
+endef
+
+# remove all the schema directory
 define DB-REMOVE-SCHEMA
 	@if [ -d "$(ARG)" ]; then \
 		echo "schema $(ARG) removed"; \
