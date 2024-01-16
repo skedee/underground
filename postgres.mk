@@ -65,6 +65,23 @@ define DB-BACKUP-SCHEMA-META
 	fi
 endef
 
+# drop only the sqitch schema
+define DB-DROP-SCHEMA
+	@if [ -z "$(1)" ]; then \
+		psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS $(DB_SCHEMA) CASCADE"; \
+	else \
+		psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS $(strip $(1)) CASCADE"; \
+	fi
+endef
+
+define DB-BACKUP-SCHEMA
+	@if [ -z "$(1)" ]; then \
+		pg_dump -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n $(DB_SCHEMA) -F c -f $(DB_SCHEMA).dump; \
+	else \
+		pg_dump -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n $(strip $(1)) -F c -f $(strip $(1)).dump; \
+	fi
+endef
+
 define DB-RESTORE-SCHEMA-META
 	@if [ -z "$(1)" ]; then \
 		pg_restore -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n sqitch_$(DB_SCHEMA) -c -F c -v --single-transaction -x sqitch_$(DB_SCHEMA).dump; \

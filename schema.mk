@@ -27,6 +27,12 @@ deploy: ## deploy sqitch migrations to the database
 revert: ## revert sqitch migrations
 	$(call SQITCH-REVERT)
 
+backup: ## backup schema
+	$(call DB-BACKUP-SCHEMA, $(shell basename `pwd`))
+
+restore: ## restore schema
+	$(call DB-RESTORE-SCHEMA, $(shell basename `pwd`))
+
 remove-schema: ## remove sqitch project
 	$(call DB-DROP-SCHEMA, $(shell basename `pwd`))
 	$(call DB-DROP-SCHEMA-META, $(shell basename `pwd`))
