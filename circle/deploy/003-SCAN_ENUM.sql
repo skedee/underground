@@ -13,9 +13,8 @@ BEGIN
         WHERE pg_namespace.nspname = schema
         AND pg_type.typname = name
     ) THEN
-        -- The table does not exist, you can create it here
         CREATE TYPE CIRCLE.SCAN_ENUM AS ENUM (
-            'top_gainer',
+            'top-gainer',
             'tv-premarket',
             'halt',
             'finviz',

@@ -13,7 +13,6 @@ BEGIN
         WHERE pg_namespace.nspname = schema
         AND pg_type.typname = name
     ) THEN
-        -- The table does not exist, you can create it here
         CREATE TYPE circle.resolution_enum AS ENUM (
             '1M',
             '5M',
