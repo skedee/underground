@@ -57,6 +57,22 @@ define DB-DROP-SCHEMA-META
 	fi
 endef
 
+define DB-BACKUP-SCHEMA-META
+	@if [ -z "$(1)" ]; then \
+		pg_dump -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n sqitch_$(DB_SCHEMA) -F c -f sqitch_$(DB_SCHEMA).dump; \
+	else \
+		pg_dump -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n sqitch_$(strip $(1)) -F c -f sqitch_$(strip $(1)).dump; \
+	fi
+endef
+
+define DB-RESTORE-SCHEMA-META
+	@if [ -z "$(1)" ]; then \
+		pg_restore -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n sqitch_$(DB_SCHEMA) -c -F c -v --single-transaction -x sqitch_$(DB_SCHEMA).dump; \
+	else \
+		pg_restore -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -n sqitch_$(strip $(1)) -c -F c -v --single-transaction -x sqitch_$(strip $(1)).dump; \
+	fi
+endef
+
 # remove all the schema directory
 define DB-REMOVE-SCHEMA
 	@if [ -d "$(ARG)" ]; then \

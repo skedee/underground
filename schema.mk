@@ -34,6 +34,12 @@ remove-schema: ## remove sqitch project
 remove-schema-meta: ## remove sqitch project (meta-data)
 	$(call DB-DROP-SCHEMA-META, $(shell basename `pwd`))
 
+backup-schema-meta: ## backup schema meta-data
+	$(call DB-BACKUP-SCHEMA-META, $(shell basename `pwd`))
+
+restore-schema-meta: ## restore schema meta-data
+	$(call DB-RESTORE-SCHEMA-META, $(shell basename `pwd`))
+
 reset: ## reset sqitch
 	$(call SQITCH-RESET)
 
