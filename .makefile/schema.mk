@@ -33,6 +33,9 @@ backup: ## backup schema
 restore: ## restore schema
 	$(call DB-RESTORE-SCHEMA, $(shell basename `pwd`))
 
+generate: ## generate queries
+	sqlc generate
+
 remove-schema: ## remove sqitch project
 	$(call DB-DROP-SCHEMA, $(shell basename `pwd`))
 	$(call DB-DROP-SCHEMA-META, $(shell basename `pwd`))

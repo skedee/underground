@@ -5,12 +5,12 @@ plugins:
     url: "https://downloads.sqlc.dev/plugin/sqlc-gen-go_1.2.0.wasm"
     sha256: "965d73d22711eee3a210565e66f918b8cb831c5f5b612e680642a4a785dd1ca1"
 sql:
-- schema: circle/deploy
-  queries: circle/queries
+- schema: deploy
+  queries: queries
   engine: postgresql
   codegen:
   - plugin: golang
-    out: "circle/db"
+    out: db
     options:
       package: db
       sql_package: pgx/v5
@@ -19,7 +19,3 @@ sql:
       emit_prepared_queries: true
       emit_pointers_for_null_types: true
       emit_all_enum_values: true
-      # overrides:
-      # - column: "authors.id"
-      #   go_type: "your/package.SomeType"
-      # rename:
