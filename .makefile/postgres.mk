@@ -2,7 +2,6 @@
 
 db-create-schema:
 	cp ./.makefile/sqitch.conf $(ARG);
-	cp ./.makefile/sqlc.yaml $(ARG);
 	cp ./.makefile/schema.mk $(ARG)/makefile;
 	sed -i "s/@@registry/registry = sqitch_$(ARG)/g" $(ARG)/sqitch.conf
 	sed -i "s/@@db_name/$(DB_NAME)"/g $(ARG)/sqitch.conf

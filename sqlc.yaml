@@ -6,7 +6,7 @@ plugins:
     sha256: "965d73d22711eee3a210565e66f918b8cb831c5f5b612e680642a4a785dd1ca1"
 sql:
 - schema: deploy
-  queries: queries
+  queries: query
   engine: postgresql
   codegen:
   - plugin: golang
