@@ -7,8 +7,8 @@ ARG_UPPER := $(shell echo $(ARG) | tr '[:lower:]' '[:upper:]')
 
 include env.sqitch
 include ../barons-court/common.mk
-include postgres.mk
-include sqitch.mk
+include ./.makefile/postgres.mk
+include ./.makefile/sqitch.mk
 
 DB_SCHEMA = $(DB_SCHEMA_DEFAULT)
 

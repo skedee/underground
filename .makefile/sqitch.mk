@@ -58,3 +58,6 @@ endef
 define SQITCH-DROP
 	psql -U $(DB_USER) -d $(DB_NAME) -c "DROP SCHEMA IF EXISTS DROP $(DB_SCHEMA);"
 endef
+
+
+# go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest

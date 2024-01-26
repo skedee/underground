@@ -1,8 +1,8 @@
 .SILENT:
 
 db-create-schema:
-	cp sqitch.conf $(ARG);
-	cp schema.mk $(ARG)/makefile;
+	cp ./.makefile/sqitch.conf $(ARG);
+	cp ./.makefile/schema.mk $(ARG)/makefile;
 	sed -i "s/@@registry/registry = sqitch_$(ARG)/g" $(ARG)/sqitch.conf
 	sed -i "s/@@db_name/$(DB_NAME)"/g $(ARG)/sqitch.conf
 	sed -i "s/@@sqitch_user/$(SQITCH_USER)"/g $(ARG)/sqitch.conf
