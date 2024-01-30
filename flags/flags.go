@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-
-	"github.com/skedee/leicester/log"
 )
 
 var (
@@ -30,5 +28,5 @@ func Parse() {
 		os.Exit(0)
 	}
 
-	log.Logger.Infof("flags Project: %s", Project)
+	fmt.Printf("flags Project: %s", Project)
 }

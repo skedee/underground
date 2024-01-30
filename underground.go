@@ -7,8 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"underground/flags"
-
-	"github.com/skedee/leicester/log"
 )
 
 //go:embed .makefile makefile env.sqitch.example README.md .gitignore
@@ -91,7 +89,7 @@ func main() {
 		}
 
 		if err := embedToDirectory(srcDir, destDir+"/"+srcDir); err != nil {
-			log.Logger.Fatalf("Error embedding files: %s", destDir+"/"+srcDir)
+			fmt.Printf("Error embedding files: %s", destDir+"/"+srcDir)
 		}
 	}
 }

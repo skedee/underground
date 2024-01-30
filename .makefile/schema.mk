@@ -7,7 +7,7 @@ ARG := $(word 2, $(MAKECMDGOALS))
 ARG_UPPER := $(shell echo $(ARG) | tr '[:lower:]' '[:upper:]')
 
 include ../env.sqitch
-include ../../barons-court/common.mk
+include ../.makefile/common.mk
 include ../.makefile/sqitch.mk
 include ../.makefile/postgres.mk
 
