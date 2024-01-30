@@ -30,7 +30,7 @@ func embedFileToDirectory(filename, destDir string) {
 		return
 	}
 
-	fmt.Printf("Copied embedded file to: %s\n", destinationFilePath)
+	fmt.Printf("Copied embedded file: %s\n", destinationFilePath)
 }
 
 func embedToDirectory(src, dest string) error {
@@ -58,7 +58,7 @@ func embedToDirectory(src, dest string) error {
 			return err
 		}
 
-		fmt.Printf("Copied embedded file to: %s\n", destinationFilePath)
+		fmt.Printf("Copied embedded file: %s\n", destinationFilePath)
 	}
 
 	return nil
