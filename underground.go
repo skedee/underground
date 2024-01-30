@@ -9,7 +9,7 @@ import (
 	"underground/flags"
 )
 
-//go:embed .makefile makefile env.sqitch.example README.md .gitignore
+//go:embed .makefile makefile env.sqitch README.md .gitignore
 var content embed.FS
 
 func embedFileToDirectory(filename, destDir string) {
@@ -76,7 +76,7 @@ func mkdir(destDir string) {
 }
 
 func main() {
-	fileNames := []string{"makefile", "env.sqitch.example", "README.md", ".gitignore"}
+	fileNames := []string{"makefile", "env.sqitch", "README.md", ".gitignore"}
 	srcDir := ".makefile"
 
 	flags.Parse()
