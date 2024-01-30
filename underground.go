@@ -72,7 +72,7 @@ func mkdir(destDir string) {
 		return
 	}
 
-	fmt.Println("Directory created successfully at", destDir)
+	fmt.Println("Directory created successfully: ", destDir)
 }
 
 func main() {
