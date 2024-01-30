@@ -53,12 +53,12 @@ func embedToDirectory(src, dest string) error {
 		}
 
 		// Write the content to the destination directory
-		destFilePath := filepath.Join(dest, entry.Name())
-		if err := os.WriteFile(destFilePath, fileContent, 0644); err != nil {
+		destinationFilePath := filepath.Join(dest, entry.Name())
+		if err := os.WriteFile(destinationFilePath, fileContent, 0644); err != nil {
 			return err
 		}
 
-		fmt.Printf("File %s written to %s\n", entry.Name(), destFilePath)
+		fmt.Printf("Copied embedded file to: %s\n", destinationFilePath)
 	}
 
 	return nil
