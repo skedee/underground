@@ -68,7 +68,7 @@ func mkdir(destDir string) {
 	// Create the directory with 0755 permissions (read, write, and execute for owner, read, and execute for group and others)
 	err := os.MkdirAll(destDir, 0755)
 	if err != nil {
-		fmt.Println("Error creating directory:", err)
+		fmt.Println("Error creating directory: ", err)
 		return
 	}
 
