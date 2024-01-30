@@ -72,7 +72,7 @@ func mkdir(destDir string) {
 		return
 	}
 
-	fmt.Println("Directory created successfully: ", destDir)
+	fmt.Println("Directory created successfully:", destDir)
 }
 
 func main() {
@@ -82,14 +82,16 @@ func main() {
 	flags.Parse()
 	if flags.Project != "" {
 		destDir := flags.Project
-		mkdir(destDir + "/" + srcDir)
+		// Write the content to the destination directory
+		destinationFilePath := filepath.Join(destDir + "/" + srcDir)
+		mkdir(destinationFilePath)
 
 		for _, fileName := range fileNames {
-			embedFileToDirectory(fileName, destDir)
+			embedFileToDirectory(fileName, destinationFilePath)
 		}
 
-		if err := embedToDirectory(srcDir, destDir+"/"+srcDir); err != nil {
-			fmt.Printf("Error embedding files: %s", destDir+"/"+srcDir)
+		if err := embedToDirectory(srcDir, destinationFilePath); err != nil {
+			fmt.Printf("Error embedding files: %s", destinationFilePath)
 		}
 	}
 }
