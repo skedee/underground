@@ -27,6 +27,4 @@ func Parse() {
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
-
-	fmt.Printf("flags Project: %s", Project)
 }
