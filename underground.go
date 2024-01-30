@@ -87,7 +87,7 @@ func main() {
 		mkdir(destinationFilePath)
 
 		for _, fileName := range fileNames {
-			embedFileToDirectory(fileName, destinationFilePath)
+			embedFileToDirectory(fileName, destDir)
 		}
 
 		if err := embedToDirectory(srcDir, destinationFilePath); err != nil {
