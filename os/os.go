@@ -67,3 +67,26 @@ func Mkdir(destDir string) {
 
 	fmt.Println("Directory created successfully:", destDir)
 }
+
+func AppendToFile(sourcePath, destinationPath string) error {
+	// Read the content of the source file
+	sourceContent, err := os.ReadFile(sourcePath)
+	if err != nil {
+		return err
+	}
+
+	// Open the destination file in append mode, or create the file if it doesn't exist
+	destinationFile, err := os.OpenFile(destinationPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer destinationFile.Close()
+
+	// Write the content of the source file to the end of the destination file
+	_, err = destinationFile.Write(sourceContent)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
