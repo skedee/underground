@@ -1,11 +1,13 @@
 package os
 
 import (
+	"bufio"
 	"embed"
 	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func EmbedFileToDirectory(content embed.FS, src, dest string) {
@@ -88,5 +90,126 @@ func AppendToFile(sourcePath, destinationPath string) error {
 		return err
 	}
 
+	return nil
+}
+
+func AppendTextBeforeFirstXYZ(filePath, textToAppend string) error {
+	// Open the file for reading and writing
+	file, err := os.OpenFile(filePath, os.O_RDWR, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Create a scanner to read the file line by line
+	scanner := bufio.NewScanner(file)
+
+	// Loop through each line
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		// Check if the line starts with "XYZ"
+		if strings.HasPrefix(line, "XYZ") {
+			// Move the file pointer back to the beginning of the line
+			_, err := file.Seek(int64(-len(line)), os.SEEK_CUR)
+			if err != nil {
+				return err
+			}
+
+			// Write the new text before the matching line
+			_, err = file.Write([]byte(textToAppend + line))
+			if err != nil {
+				return err
+			}
+
+			// Move the file pointer to the end of the line
+			_, err = file.Seek(int64(len(textToAppend)), os.SEEK_CUR)
+			if err != nil {
+				return err
+			}
+
+			// Break out of the loop after the first match
+			break
+		}
+	}
+
+	// Check for errors during scanning
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+
+	fmt.Println("Text appended successfully.")
+	return nil
+}
+
+func InsertFileAfterFirstXYZ(filePath, insertFilePath string) error {
+	// Open the main file for reading and writing
+	file, err := os.OpenFile(filePath, os.O_RDWR, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Open the insert file for reading
+	insertFile, err := os.Open(insertFilePath)
+	if err != nil {
+		return err
+	}
+	defer insertFile.Close()
+
+	// Create a temporary file to store the modified content
+	tmpFilePath := filePath + ".tmp"
+	tmpFile, err := os.Create(tmpFilePath)
+	if err != nil {
+		return err
+	}
+	defer tmpFile.Close()
+
+	// Create a scanner to read the main file line by line
+	scanner := bufio.NewScanner(file)
+
+	// Loop through each line
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		// Write the original line to the temporary file
+		_, err := tmpFile.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+
+		// Check if the line starts with "XYZ"
+		if strings.HasPrefix(line, "XYZ") {
+			// Copy the content of the insert file to the temporary file
+			scannerInsert := bufio.NewScanner(insertFile)
+			for scannerInsert.Scan() {
+				insertLine := scannerInsert.Text()
+				_, err := tmpFile.WriteString(insertLine + "\n")
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	// Check for errors during scanning
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+
+	// Close and remove the original file
+	if err := file.Close(); err != nil {
+		return err
+	}
+	if err := os.Remove(filePath); err != nil {
+		return err
+	}
+
+	// Rename the temporary file to the original file path
+	if err := os.Rename(tmpFilePath, filePath); err != nil {
+		return err
+	}
+
+	fmt.Println("File updated successfully.")
 	return nil
 }
