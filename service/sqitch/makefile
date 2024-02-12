@@ -1,19 +1,16 @@
-.SILENT:
-.DEFAULT_GOAL := help
-
-# commandline argument
-ARG := $(word 2, $(MAKECMDGOALS))
-ARG_UPPER := $(shell echo $(ARG) | tr '[:lower:]' '[:upper:]')
-
+# @include@
 include env.sqitch
-include ./.makefile/common.mk
 include ./.makefile/postgres.mk
 include ./.makefile/sqitch.mk
+# @include$
 
+# @include-post@
 DB_SCHEMA = $(DB_SCHEMA_DEFAULT)
 
 .PHONY: help create drop create-schema remove-schema $(ARG)
+# @include-post$
 
+# @target@
 create: ## create database
 	$(call DB-CREATE)
 
@@ -27,6 +24,4 @@ remove-schema: ## remove sqitch project (directories and meta-data)
 	$(call DB-DROP-SCHEMA)
 	$(call DB-DROP-SCHEMA-META)
 	$(call DB-REMOVE-SCHEMA)
-
-help:
-	$(call PRINT_MENU, "root")
+# @target$
