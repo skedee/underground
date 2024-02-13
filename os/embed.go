@@ -73,8 +73,9 @@ func EmbedAppendToFile(content embed.FS, sourcePath, destinationPath string) err
 
 func CopyEmbedFiles(content embed.FS, fileNames []string, srcDir, destPath string) {
 	for _, fileName := range fileNames {
-		src := filepath.Join(srcDir, fileName)
-		destDir := filepath.Join(destPath, fileName)
+		src := filepath.Join(srcDir, fileName) // need relative path for embed resource
+		destDir := GetPath(destPath, fileName)
+		fmt.Printf("abc src: %s des: %s\n", src, destDir)
 		CopyEmbedFileToDirectory(content, src, destDir)
 	}
 }
@@ -126,4 +127,51 @@ func CopyEmbedToDirectory(content embed.FS, src, dest string) error {
 	}
 
 	return nil
+}
+
+func GrepEmbedLinesBetweenKeywords(content embed.FS, filename, startKeyword, endKeyword string) ([]string, error) {
+	// Open the file for reading
+	file, err := content.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var lines []string
+	capturing := false
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		// Skip lines containing the start keyword
+		if strings.Contains(line, startKeyword) {
+			capturing = true
+			continue
+		}
+
+		// If capturing is true, add the line to the result
+		if capturing {
+			// If the line contains the end keyword, stop capturing
+			if strings.Contains(line, endKeyword) {
+				break
+			}
+			lines = append(lines, line)
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return lines, nil
+}
+
+func MergeEmbedFile(content embed.FS, keywords []string, sourceFile, destFile string) {
+	for _, keyword := range keywords {
+		lines, _ := GrepEmbedLinesBetweenKeywords(content, sourceFile, keyword+"@", keyword+"$")
+		if len(lines) > 0 {
+			InsertAfterKeyword(destFile, keyword+"@", lines)
+		}
+	}
 }

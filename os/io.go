@@ -148,6 +148,7 @@ func Replace(filename, oldKeyword, newKeyword string) error {
 func MergeFiles(keywords []string, sourceFile, destFile string) {
 	for _, keyword := range keywords {
 		lines, _ := GrepLinesBetweenKeywords(sourceFile, keyword+"@", keyword+"$")
+		fmt.Printf("AAAAAAA %s: %s: %s\n", sourceFile, keyword, lines)
 		if len(lines) > 0 {
 			InsertAfterKeyword(destFile, keyword+"@", lines)
 		}

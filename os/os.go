@@ -3,6 +3,7 @@ package os
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"underground/flags"
 )
 
@@ -30,6 +31,18 @@ func Mkdir(destDir string) {
 	}
 
 	fmt.Println("Directory created successfully:", destDir)
+}
+
+func GetCwd() (string, error) {
+	return os.Getwd()
+}
+
+func GetPath(path, fileName string) string {
+	cwd, _ := GetCwd()
+	destDir := filepath.Join(cwd, path)
+	destDir = filepath.Join(destDir, fileName)
+
+	return destDir
 }
 
 func Rename(oldName, newName string) error {

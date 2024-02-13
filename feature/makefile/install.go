@@ -2,7 +2,6 @@ package makefile
 
 import (
 	"embed"
-	"fmt"
 	"path/filepath"
 	"underground/flags"
 	"underground/os"
@@ -16,10 +15,7 @@ func Install(content embed.FS) {
 	destDir := filepath.Join(flags.Project, ".makefile")
 	srcDir := "feature/makefile/.makefile"
 	os.Mkdir(destDir)
-
-	if err := os.CopyEmbedToDirectory(content, srcDir, destDir); err != nil {
-		fmt.Printf("Error embedding files: %s", destDir)
-	}
+	os.CopyEmbedToDirectory(content, srcDir, destDir)
 
 	fileNames := []string{"makefile", "README.md"}
 	srcDir = "feature/makefile"

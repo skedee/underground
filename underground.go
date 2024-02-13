@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	//go:embed feature/goservice/makefile feature/goservice/go.mod.txt feature/goservice/go.sum.txt
+	//go:embed feature/goservice/makefile feature/goservice/go.mod.txt feature/goservice/go.sum.txt feature/goservice/main.go
 	contentGoService embed.FS
 
 	//go:embed feature/makefile/.makefile feature/makefile/makefile feature/makefile/README.md
@@ -28,7 +28,7 @@ func main() {
 	flags.Parse()
 	if flags.Project != "" {
 		os.Mkdir(flags.Project)
-		// // create makefile
+		// create makefile
 		makefile.Install(contentMakefile)
 		// add golang service files
 		goservice.Install(contentGoService)
