@@ -10,7 +10,7 @@ build: ## build go service
 install: ## install go service
 	go install
 
-setup-go: ## install or upgrade golang
+setup: ## install or upgrade golang
 	brew install wget
 	wget https://go.dev/dl/go$(GO_VERSION).darwin-arm64.pkg
 	sudo installer -pkg go$(GO_VERSION).darwin-arm64.pkg -target /Applications
