@@ -15,6 +15,13 @@ include ./.makefile/common.mk
 # @include-post$
 
 # @target@
+docs-serve: ## serve docsify
+	docsify serve .
+
+docs-setup: ## setup docsify
+	@echo "npm i docsify-cli"
+	sudo npm i docsify-cli -g
+	
 help:
 	$(call PRINT_MENU, "root")
 # @target$

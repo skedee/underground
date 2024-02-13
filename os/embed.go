@@ -75,7 +75,6 @@ func CopyEmbedFiles(content embed.FS, fileNames []string, srcDir, destPath strin
 	for _, fileName := range fileNames {
 		src := filepath.Join(srcDir, fileName) // need relative path for embed resource
 		destDir := GetPath(destPath, fileName)
-		fmt.Printf("abc src: %s des: %s\n", src, destDir)
 		CopyEmbedFileToDirectory(content, src, destDir)
 	}
 }
@@ -100,7 +99,7 @@ func CopyEmbedFileToDirectory(content embed.FS, src, dest string) {
 
 func CopyEmbedToDirectory(content embed.FS, src, dest string) error {
 	// Ensure the destination directory exists
-	if err := os.MkdirAll(dest, 0755); err != nil {
+	if err := Mkdir(dest); err != nil {
 		return err
 	}
 

@@ -22,15 +22,16 @@ func FileCreate(filename string) {
 	}
 }
 
-func Mkdir(destDir string) {
+func Mkdir(destDir string) error {
 	// Create the directory with 0755 permissions (read, write, and execute for owner, read, and execute for group and others)
 	err := os.MkdirAll(destDir, 0755)
 	if err != nil {
 		fmt.Println("Error creating directory: ", err)
-		return
+		return err
 	}
 
 	fmt.Println("Directory created successfully:", destDir)
+	return nil
 }
 
 func GetCwd() (string, error) {
