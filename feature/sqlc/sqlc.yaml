@@ -5,7 +5,7 @@ plugins:
     url: "https://downloads.sqlc.dev/plugin/sqlc-gen-go_1.2.0.wasm"
     sha256: "965d73d22711eee3a210565e66f918b8cb831c5f5b612e680642a4a785dd1ca1"
 sql:
-- schema: ../underground/circle/deploy
+- schema: ../avtal/main/webapp/api/db/migrations
   queries: query
   engine: postgresql
   codegen:
