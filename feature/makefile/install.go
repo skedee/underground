@@ -8,9 +8,13 @@ import (
 	"underground/os"
 )
 
+var (
+	Keywords = []string{"@include-pre", "@include", "@include-post", "@target"}
+)
+
 func Install(content embed.FS) {
 	destDir := filepath.Join(flags.Project, ".makefile")
-	srcDir := "service/makefile/.makefile"
+	srcDir := "feature/makefile/.makefile"
 	os.Mkdir(destDir)
 
 	if err := os.CopyEmbedToDirectory(content, srcDir, destDir); err != nil {
@@ -18,6 +22,6 @@ func Install(content embed.FS) {
 	}
 
 	fileNames := []string{"makefile", "README.md"}
-	srcDir = "service/makefile"
+	srcDir = "feature/makefile"
 	os.CopyEmbedFiles(content, fileNames, srcDir, flags.Project)
 }

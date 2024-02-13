@@ -24,4 +24,9 @@ remove-schema: ## remove sqitch project (directories and meta-data)
 	$(call DB-DROP-SCHEMA)
 	$(call DB-DROP-SCHEMA-META)
 	$(call DB-REMOVE-SCHEMA)
+
+setup: ## setup sqitch locally
+	brew tap sqitchers/sqitch
+	brew install sqitch --with-postgres-support	
+
 # @target$

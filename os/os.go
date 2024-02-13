@@ -31,3 +31,12 @@ func Mkdir(destDir string) {
 
 	fmt.Println("Directory created successfully:", destDir)
 }
+
+func Rename(oldName, newName string) error {
+	// Rename the file
+	err := os.Rename(oldName, newName)
+	if err != nil {
+		return err
+	}
+	return nil
+}

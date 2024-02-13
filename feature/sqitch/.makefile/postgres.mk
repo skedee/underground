@@ -3,16 +3,16 @@
 db-create-schema:
 	cp ./.makefile/sqitch.conf $(ARG);
 	cp ./.makefile/schema.mk $(ARG)/makefile;
-	sed -i "s/@@registry/registry = sqitch_$(ARG)/g" $(ARG)/sqitch.conf
-	sed -i "s/@@db_name/$(DB_NAME)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@sqitch_user/$(SQITCH_USER)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@sqitch_email/$(SQITCH_EMAIL)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@engine_client/$(SQITCH_ENGINE_CLIENT)/g" $(ARG)/sqitch.conf
-	sed -i "s/@@engine/$(SQITCH_ENGINE)/g" $(ARG)/sqitch.conf
-	sed -i "s/@@db_user/$(DB_USER)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@db_password/$(PGPASSWORD)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@db_host/$(DB_HOST)"/g $(ARG)/sqitch.conf
-	sed -i "s/@@db_port/$(DB_PORT)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@registry/registry = sqitch_$(ARG)/g" $(ARG)/sqitch.conf
+	sed -i '' "s/@@db_name/$(DB_NAME)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@sqitch_user/$(SQITCH_USER)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@sqitch_email/$(SQITCH_EMAIL)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@engine_client/$(SQITCH_ENGINE_CLIENT)/g" $(ARG)/sqitch.conf
+	sed -i '' "s/@@engine/$(SQITCH_ENGINE)/g" $(ARG)/sqitch.conf
+	sed -i '' "s/@@db_user/$(DB_USER)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@db_password/$(PGPASSWORD)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@db_host/$(DB_HOST)"/g $(ARG)/sqitch.conf
+	sed -i '' "s/@@db_port/$(DB_PORT)"/g $(ARG)/sqitch.conf
 	cd $(ARG); \
 	sqitch init $(DB_NAME)
 	echo "sqitch init $(DB_NAME)"

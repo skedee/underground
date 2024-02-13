@@ -2,30 +2,39 @@ package main
 
 import (
 	"embed"
+	"underground/feature/goservice"
+	"underground/feature/makefile"
+	"underground/feature/sqitch"
+	"underground/feature/sqlc"
 	"underground/flags"
 	"underground/os"
-	"underground/service/makefile"
-	"underground/service/sqitch"
 )
 
-//go:embed service/makefile/.makefile service/makefile/makefile service/makefile/README.md
-var contentMakefile embed.FS
+var (
+	//go:embed feature/goservice/makefile feature/goservice/go.mod.txt feature/goservice/go.sum.txt
+	contentGoService embed.FS
 
-//go:embed service/sqitch/.makefile service/sqitch/makefile service/sqitch/env.sqitch service/sqitch/README.md
-var contentSqitch embed.FS
+	//go:embed feature/makefile/.makefile feature/makefile/makefile feature/makefile/README.md
+	contentMakefile embed.FS
 
-//go:embed service/sqlc/makefile service/sqlc/sqlc.yaml service/sqlc/README.md
-var contentSqlc embed.FS
+	//go:embed feature/sqitch/.makefile feature/sqitch/makefile feature/sqitch/env.sqitch feature/sqitch/README.md
+	contentSqitch embed.FS
+
+	//go:embed feature/sqlc/makefile feature/sqlc/sqlc.yaml feature/sqlc/README.md
+	contentSqlc embed.FS
+)
 
 func main() {
 	flags.Parse()
 	if flags.Project != "" {
 		os.Mkdir(flags.Project)
-		// create makefile
+		// // create makefile
 		makefile.Install(contentMakefile)
+		// add golang service files
+		goservice.Install(contentGoService)
 		// add sqitch files
 		sqitch.Install(contentSqitch)
 		// add sqlc files
-		//sqlc.Install(contentSqlc)
+		sqlc.Install(contentSqlc)
 	}
 }

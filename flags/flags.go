@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	Project = ""
-	Sqitch  = false
-	Sqlc    = false
+	Project   = ""
+	Sqitch    = false
+	Sqlc      = false
+	GoService = false
 )
 
 func Parse() {
@@ -19,6 +20,7 @@ func Parse() {
 	flag.StringVar(&Project, "p", Project, "New underground project")
 	flag.BoolVar(&Sqitch, "s", Sqitch, "Add Sqitch to project")
 	flag.BoolVar(&Sqlc, "c", Sqlc, "Add Sqlc to project")
+	flag.BoolVar(&GoService, "g", GoService, "Add Go Service to project")
 
 	flag.Parse() // Parse the flags
 

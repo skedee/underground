@@ -7,57 +7,38 @@ import (
 	"strings"
 )
 
-func InsertStringsAfterKeyword(filename string, keyword string, lines []string) error {
-	// Open the file for reading
+func InsertAfterKeyword(filename string, keyword string, lines []string) error {
+	// Open the file for reading and writing
 	file, err := os.OpenFile(filename, os.O_RDWR, 0644)
 	if err != nil {
-		return fmt.Errorf("error opening file: %w", err)
+		return err
 	}
 	defer file.Close()
 
-	// Create a temporary file to write the modified content
-	tmpfile, err := os.CreateTemp("", "temp.*.txt")
-	if err != nil {
-		return fmt.Errorf("error creating temporary file: %w", err)
-	}
-	defer os.Remove(tmpfile.Name())
-	defer tmpfile.Close()
-
 	// Create a scanner to read the file line by line
 	scanner := bufio.NewScanner(file)
+	var outputLines []string
+	// Read lines until the keyword is found
 	for scanner.Scan() {
 		line := scanner.Text()
-		_, err := tmpfile.WriteString(line + "\n")
-		if err != nil {
-			return fmt.Errorf("error writing to temporary file: %w", err)
-		}
-		// Check if the line contains the keyword
+		outputLines = append(outputLines, line)
 		if strings.Contains(line, keyword) {
-			// Write the lines to be inserted after the line with the keyword
-			for _, l := range lines {
-				_, err := tmpfile.WriteString(l + "\n")
-				if err != nil {
-					return fmt.Errorf("error writing to temporary file: %w", err)
-				}
-			}
+			fmt.Printf("\nfound %s\n", keyword)
+			// Insert the lines after the keyword
+			outputLines = append(outputLines, lines...)
 		}
 	}
-
-	// Check for scanner errors
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading file: %w", err)
+	// Write the updated content back to the file
+	file.Seek(0, 0)
+	file.Truncate(0)
+	writer := bufio.NewWriter(file)
+	for _, line := range outputLines {
+		fmt.Fprintln(writer, line)
 	}
-
-	// Rename the temporary file to replace the original file
-	err = os.Rename(tmpfile.Name(), filename)
-	if err != nil {
-		return fmt.Errorf("error renaming temporary file: %w", err)
-	}
-
-	return nil
+	return writer.Flush()
 }
 
-func InsertStringsBeforeKeyword(filename string, keyword string, lines []string) error {
+func InsertBeforeKeyword(filename string, keyword string, lines []string) error {
 	// Open the file for reading
 	file, err := os.OpenFile(filename, os.O_RDWR, 0644)
 	if err != nil {
@@ -145,165 +126,30 @@ func GrepLinesBetweenKeywords(filename, startKeyword, endKeyword string) ([]stri
 	return lines, nil
 }
 
-func Sed(filename, arg string) error {
-	// Open the file for reading
-	file, err := os.Open(filename)
+func Replace(filename, oldKeyword, newKeyword string) error {
+	// Read the content of the file
+	content, err := os.ReadFile(filename)
 	if err != nil {
-		return fmt.Errorf("error opening file: %w", err)
+		return err
 	}
-	defer file.Close()
 
-	// Create a temporary file to write the modified content
-	tmpfile, err := os.CreateTemp("", "sqitch.conf.*.tmp")
+	// Replace all instances of the old keyword with the new keyword
+	newContent := strings.ReplaceAll(string(content), oldKeyword, newKeyword)
+
+	// Write the updated content back to the file
+	err = os.WriteFile(filename, []byte(newContent), 0644)
 	if err != nil {
-		return fmt.Errorf("error creating temporary file: %w", err)
-	}
-	defer os.Remove(tmpfile.Name())
-	defer tmpfile.Close()
-
-	// Create a scanner to read the file line by line
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		// Perform the substitution
-		line = strings.Replace(line, "@@registry", fmt.Sprintf("registry = sqitch_%s", arg), -1)
-		// Write the modified line to the temporary file
-		_, err := tmpfile.WriteString(line + "\n")
-		if err != nil {
-			return fmt.Errorf("error writing to temporary file: %w", err)
-		}
-	}
-
-	// Check for scanner errors
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading file: %w", err)
-	}
-
-	// Rename the temporary file to replace the original file
-	err = os.Rename(tmpfile.Name(), filename)
-	if err != nil {
-		return fmt.Errorf("error renaming temporary file: %w", err)
+		return err
 	}
 
 	return nil
 }
 
-func InsertFileBeforeKeyword(keyword, filename, insertFilename string) error {
-	// Open the original file for reading
-	file, err := os.Open(filename)
-	if err != nil {
-		return fmt.Errorf("error opening file: %w", err)
-	}
-	defer file.Close()
-
-	// Create a temporary file to write the modified content
-	tmpfile, err := os.CreateTemp("", "temp.*.txt")
-	if err != nil {
-		return fmt.Errorf("error creating temporary file: %w", err)
-	}
-	defer os.Remove(tmpfile.Name())
-	defer tmpfile.Close()
-
-	// Open the file to be inserted
-	insertFile, err := os.Open(insertFilename)
-	if err != nil {
-		return fmt.Errorf("error opening insert file: %w", err)
-	}
-	defer insertFile.Close()
-
-	// Create a scanner to read the original file line by line
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fmt.Printf("Looking for: %s\n", keyword)
-		// Check if the line contains the keyword
-		if strings.Contains(line, keyword) {
-			fmt.Printf("FOUND %s\n", keyword)
-			// Write the content of the insert file before the line with the keyword
-			insertScanner := bufio.NewScanner(insertFile)
-			for insertScanner.Scan() {
-				_, err := tmpfile.WriteString(insertScanner.Text() + "\n")
-				if err != nil {
-					return fmt.Errorf("error writing to temporary file: %w", err)
-				}
-			}
-		}
-		// Write the original line to the temporary file
-		_, err := tmpfile.WriteString(line + "\n")
-		if err != nil {
-			return fmt.Errorf("error writing to temporary file: %w", err)
+func MergeFiles(keywords []string, sourceFile, destFile string) {
+	for _, keyword := range keywords {
+		lines, _ := GrepLinesBetweenKeywords(sourceFile, keyword+"@", keyword+"$")
+		if len(lines) > 0 {
+			InsertAfterKeyword(destFile, keyword+"@", lines)
 		}
 	}
-
-	// Check for scanner errors
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading file: %w", err)
-	}
-
-	// Rename the temporary file to replace the original file
-	err = os.Rename(tmpfile.Name(), filename)
-	if err != nil {
-		return fmt.Errorf("error renaming temporary file: %w", err)
-	}
-
-	return nil
-}
-
-func InsertFileAfterKeyword(keyword, filename, insertFilename string) error {
-	// Open the original file for reading
-	file, err := os.Open(filename)
-	if err != nil {
-		return fmt.Errorf("error opening file: %w", err)
-	}
-	defer file.Close()
-
-	// Create a temporary file to write the modified content
-	tmpfile, err := os.CreateTemp("", "temp.*.txt")
-	if err != nil {
-		return fmt.Errorf("error creating temporary file: %w", err)
-	}
-	defer os.Remove(tmpfile.Name())
-	defer tmpfile.Close()
-
-	// Open the file to be inserted
-	insertFile, err := os.Open(insertFilename)
-	if err != nil {
-		return fmt.Errorf("error opening insert file: %w", err)
-	}
-	defer insertFile.Close()
-
-	// Create a scanner to read the original file line by line
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		// Write the original line to the temporary file
-		_, err := tmpfile.WriteString(line + "\n")
-		if err != nil {
-			return fmt.Errorf("error writing to temporary file: %w", err)
-		}
-		// Check if the line contains the keyword
-		if strings.Contains(line, keyword) {
-			// Write the content of the insert file after the line with the keyword
-			insertScanner := bufio.NewScanner(insertFile)
-			for insertScanner.Scan() {
-				_, err := tmpfile.WriteString(insertScanner.Text() + "\n")
-				if err != nil {
-					return fmt.Errorf("error writing to temporary file: %w", err)
-				}
-			}
-		}
-	}
-
-	// Check for scanner errors
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading file: %w", err)
-	}
-
-	// Rename the temporary file to replace the original file
-	err = os.Rename(tmpfile.Name(), filename)
-	if err != nil {
-		return fmt.Errorf("error renaming temporary file: %w", err)
-	}
-
-	return nil
 }

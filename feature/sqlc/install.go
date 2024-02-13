@@ -3,6 +3,7 @@ package sqlc
 import (
 	"embed"
 	"path/filepath"
+	"underground/feature/makefile"
 	"underground/flags"
 	"underground/os"
 )
@@ -10,11 +11,11 @@ import (
 func Install(content embed.FS) {
 	if flags.Sqlc {
 		fileNames := []string{"sqlc.yaml", "README.md"}
-		srcDir := "service/sqlc"
+		srcDir := "feature/sqlc"
 		os.CopyEmbedFiles(content, fileNames, srcDir, flags.Project)
 
-		destMakefile := filepath.Join(flags.Project, "makefile")
-		srcMakefile := filepath.Join(srcDir, "makefile")
-		os.InsertFileBeforeKeyword("help:", destMakefile, srcMakefile)
+		srcFile := filepath.Join("feature/sqlc", "makefile")
+		destFile := filepath.Join(flags.Project, "makefile")
+		os.MergeFiles(makefile.Keywords, srcFile, destFile)
 	}
 }
