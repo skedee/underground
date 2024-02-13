@@ -7,7 +7,7 @@ Use the Underground to create the project scaffolding.
 Run make target to install or upgrade golang.
 
 `
-make setup
+make setup-go
 `
 ## Setup Environment
 

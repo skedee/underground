@@ -2,6 +2,8 @@
 .SILENT:
 .DEFAULT_GOAL := help
 
+OS = $(shell uname -s)
+
 # commandline argument
 ARG := $(word 2, $(MAKECMDGOALS))
 ARG_UPPER := $(shell echo $(ARG) | tr '[:lower:]' '[:upper:]')
