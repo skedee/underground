@@ -17,5 +17,7 @@ func Install(content embed.FS) {
 		srcFile := filepath.Join("feature/sqlc", "makefile")
 		destFile := filepath.Join(flags.Project, "makefile")
 		os.MergeEmbedFile(content, makefile.Keywords, srcFile, destFile)
+
+		os.Mkdir(os.GetPath(flags.Project, "query"))
 	}
 }
