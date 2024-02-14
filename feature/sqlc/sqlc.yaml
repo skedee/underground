@@ -5,11 +5,9 @@ plugins:
     url: "https://downloads.sqlc.dev/plugin/sqlc-gen-go_1.2.0.wasm"
     sha256: "965d73d22711eee3a210565e66f918b8cb831c5f5b612e680642a4a785dd1ca1"
 sql:
-- engine: postgresql
+- schema: "POINT TO DIRECTORY WITH MIGRATIONS. i.e. migrations/*"
   queries: query
-  schema: migrations/*
-  database:
-    uri: postgres://postgres:postgres@localhost/avtal_dev
+  engine: postgresql
   codegen:
   - plugin: golang
     out: db
@@ -21,4 +19,3 @@ sql:
       emit_prepared_queries: true
       emit_pointers_for_null_types: true
       emit_all_enum_values: true
-      
