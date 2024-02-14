@@ -1,5 +1,6 @@
 # @target@
 generate: ## generate queries
+	rm -rf db
 	sqlc generate
 
 setup-sqlc: ## install or upgrade sqlc
