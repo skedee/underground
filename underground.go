@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	//go:embed feature/goservice/makefile feature/goservice/go.mod.txt feature/goservice/go.sum.txt feature/goservice/main.go
+	//go:embed feature/goservice/makefile feature/goservice/*
 	contentGoService embed.FS
 
 	//go:embed feature/makefile/.makefile/* feature/makefile/docsify/* feature/makefile/makefile feature/makefile/README.md
