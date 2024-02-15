@@ -26,4 +26,9 @@ func Install(content embed.FS) {
 	fileNames := []string{"makefile", "README.md"}
 	srcDir = "feature/makefile"
 	os.CopyEmbedFiles(content, fileNames, srcDir, flags.Project)
+
+	lines := []string{
+		"APP_NAME=" + flags.Project,
+	}
+	os.InsertAfterKeyword(os.GetPath(flags.Project, "makefile"), ".SILENT:", lines)
 }
