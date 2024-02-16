@@ -1,6 +1,8 @@
 # @include-pre@
 GO_VERSION = 1.22.0
 
+# domain name
+DOMAIN=$$(git config user.email | sed 's/.*@//; s/\..*//')
 # @include-pre$
 
 # @target@
@@ -11,8 +13,6 @@ install: ## install go service
 	go install
 
 tag-latest: ## get the latest github tag for the go service
- 	DOMAIN=$$(git config user.email | sed 's/.*@//')
-	echo $(DOMAIN)
 	git ls-remote --tags --refs https://github.com/$(DOMAIN)/$(APP_NAME) | awk '{print $2}' | cut -d '/' -f 3 | sort -V | tail -n 1
 	
 tag: ## create a new github tag for go service
