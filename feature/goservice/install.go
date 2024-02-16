@@ -21,6 +21,7 @@ func Install(content embed.FS) {
 		srcFile := filepath.Join("feature/goservice", "makefile")
 		destFile := os.GetPath(flags.Project, "makefile")
 		os.MergeEmbedFile(content, makefile.Keywords, srcFile, destFile)
+		os.Replace(filepath.Join(flags.Project, "makefile"), "@@project-name@@", "skedee/"+flags.Project+".git")
 
 		lines := []string{
 			flags.Project,
