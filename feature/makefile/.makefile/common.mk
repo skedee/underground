@@ -18,11 +18,11 @@ endef
 define PRINT_MENU
 	if [ -n "$(1)" ]; then \
 		printf "📁 $(GREEN)$(APP_NAME)$(NC)\n"; \
-		grep -E '^[a-zA-Z_0-9-]+:.*?## .*$$' makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "🔹 $(YELLOW)%-30s$(NC) %s\n", $$1, $$2}'; \
+		grep -E '^[a-zA-Z_0-9-]+:.*?## .*$$' makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "🔹 $(YELLOW)%-30s$(NC) %s\n", $$1, $$2}' | sort; \
 		echo ""; \
 	else \
 		printf "📂 $(GREEN)$(APP_NAME)$(NC)\n"; \
-		grep -E '^[a-zA-Z_0-9-]+:.*?## .*$$' makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "🔹 $(YELLOW)%-30s$(NC) %s\n", $$1, $$2}'; \
+		grep -E '^[a-zA-Z_0-9-]+:.*?## .*$$' makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "🔹 $(YELLOW)%-30s$(NC) %s\n", $$1, $$2}' | sort; \
 		echo ""; \
 	fi;
 endef
