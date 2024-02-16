@@ -10,7 +10,7 @@ import (
 
 func Install(content embed.FS) {
 	if flags.GoService {
-		fileNames := []string{"go.mod.txt", "go.sum.txt", "main.go"}
+		fileNames := []string{"go.mod.txt", "go.sum.txt", "main.go", ".gitignore"}
 		srcDir := "feature/goservice"
 		os.CopyEmbedFiles(content, fileNames, srcDir, flags.Project)
 		os.Rename(filepath.Join(flags.Project, "go.mod.txt"), filepath.Join(flags.Project, "go.mod"))
@@ -19,7 +19,12 @@ func Install(content embed.FS) {
 		os.Replace(filepath.Join(flags.Project, "main.go"), "goservice", "main")
 
 		srcFile := filepath.Join("feature/goservice", "makefile")
-		destFile := os.GetPath(flags.Project, "makefile") // filepath.Join(flags.Project, "makefile")
+		destFile := os.GetPath(flags.Project, "makefile")
 		os.MergeEmbedFile(content, makefile.Keywords, srcFile, destFile)
+
+		lines := []string{
+			flags.Project,
+		}
+		os.InsertAfterKeyword(os.GetPath(flags.Project, ".gitignore"), ".vscode/", lines)
 	}
 }
