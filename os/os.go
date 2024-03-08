@@ -54,3 +54,8 @@ func Rename(oldName, newName string) error {
 	}
 	return nil
 }
+
+func WriteFile(filename string, content []byte) error {
+	// Write content to the file
+	return os.WriteFile(filename, content, 0644)
+}
