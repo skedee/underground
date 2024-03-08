@@ -1,13 +1,29 @@
 # @include-pre@
 GO_VERSION = 1.22.0
 
-# domain name
-DOMAIN=$$(git config user.email | sed 's/.*@//; s/\..*//')
+.PHONY: build install tag tag-latest run watch test test-all
+
 # @include-pre$
 
 # @target@
 build: ## build go service
+	go mod tidy
 	go build
+
+run: build ## run the go service
+	@if pgrep -x "$(APP_NAME)" > /dev/null; then \
+		pkill $(APP_NAME); \
+	fi
+	./$(APP_NAME) &
+
+watch: ## watch and rebuild on file changes
+	echo "Watching for changes to *.go files..."
+	$(MAKE) run
+	@while true; do \
+		trap 'break' INT; \
+		fswatch -r -1 api bo dao query validate; \
+		$(MAKE) run; \
+	done
 
 install: ## install go service
 	go install
@@ -40,9 +56,17 @@ endif
 setup-go: ## install or upgrade golang
 	@if [ "$(OS)" = "Darwin" ]; then \
 		brew install wget; \
+		brew install fswatch; \
 		wget https://go.dev/dl/go$(GO_VERSION).darwin-arm64.pkg; \
 		sudo installer -pkg go$(GO_VERSION).darwin-arm64.pkg -target /Applications; \
 		rm go$(GO_VERSION).darwin-arm64.pkg; \
+	else \
+		wget https://go.dev/dl/go$(GO_VERSION).linux-amd64.tar.gz; \
+		sudo tar -C /usr/local -xzf go$(GO_VERSION).linux-amd64.tar.gz; \
+		echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc; \
+		echo 'export GOPATH=$HOME/go' >> ~/.bashrc; \
+		echo 'export PATH=$PATH:$GOPATH/bin' >> ~/.bashrc; \
+		source ~/.bashrc; \		
 	fi
 
 # @target$
