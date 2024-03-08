@@ -1,3 +1,7 @@
+# @include-pre@
+.PHONY: generate setup-sqlc
+# @include-pre$
+
 # @target@
 generate: ## generate queries
 	rm -rf db
