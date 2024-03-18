@@ -1,16 +1,22 @@
 # @include-pre@
-GO_VERSION = 1.22.0
+GO_VERSION = 1.22.1
 
 .PHONY: build install tag tag-latest run watch test test-all
 
 # @include-pre$
 
 # @target@
-build: ## build go service
+build-darwin: generate ## build go service
 	go mod tidy
-	go build
+	swag init
+	GOOS=darwin GOARCH=amd64 go build -o ${APP_NAME}
 
-run: build ## run the go service
+build-linux: generate ## build go service
+	go mod tidy
+	swag init	
+	GOOS=linux GOARCH=amd64 go build -o ${APP_NAME}	
+
+run: build-darwin ## run the go service
 	@if pgrep -x "$(APP_NAME)" > /dev/null; then \
 		pkill $(APP_NAME); \
 	fi
@@ -68,5 +74,6 @@ setup-go: ## install or upgrade golang
 		echo 'export PATH=$PATH:$GOPATH/bin' >> ~/.bashrc; \
 		source ~/.bashrc; \		
 	fi
+	go install github.com/swaggo/swag/cmd/swag@latest
 
 # @target$
