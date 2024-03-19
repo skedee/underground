@@ -29,6 +29,9 @@ docs-setup: ## setup docsify
 	@echo "npm i docsify-cli"
 	sudo npm i docsify-cli -g
 	
+about: ## display about
+	@sed -n '3p' README.md
+		
 help:
 	$(call PRINT_MENU, "root")
 # @target$
