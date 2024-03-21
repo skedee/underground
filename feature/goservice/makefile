@@ -27,7 +27,7 @@ watch: ## watch and rebuild on file changes
 	$(MAKE) run
 	@while true; do \
 		trap 'break' INT; \
-		fswatch -r -1 src; \
+		fswatch -r -1 api bo dao sqlc/query validate; \
 		$(MAKE) run; \
 	done
 
