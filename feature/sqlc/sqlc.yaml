@@ -6,11 +6,11 @@ plugins:
     sha256: "965d73d22711eee3a210565e66f918b8cb831c5f5b612e680642a4a785dd1ca1"
 sql:
 - schema: "POINT TO DIRECTORY WITH MIGRATIONS. i.e. migrations/*"
-  queries: query
+  queries: sqlc/query
   engine: postgresql
   codegen:
   - plugin: golang
-    out: db
+    out: sqlc/db
     options:
       package: db
       sql_package: pgx/v5

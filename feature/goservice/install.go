@@ -26,7 +26,6 @@ func Install(content embed.FS) {
 		os.Mkdir(os.GetPath(flags.Project, "shared"))
 		os.Mkdir(os.GetPath(flags.Project, "bo"))
 		os.Mkdir(os.GetPath(flags.Project, "dao"))
-		os.Mkdir(os.GetPath(flags.Project, "sqlc/query"))
 
 		lines := []string{
 			flags.Project,
