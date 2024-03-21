@@ -22,6 +22,12 @@ func Install(content embed.FS) {
 		destFile := os.GetPath(flags.Project, "makefile")
 		os.MergeEmbedFile(content, makefile.Keywords, srcFile, destFile)
 
+		os.Mkdir("api")
+		os.Mkdir("shared")
+		os.Mkdir("bo")
+		os.Mkdir("dao")
+		os.Mkdir("sqlc/query")
+
 		lines := []string{
 			flags.Project,
 		}
