@@ -12,12 +12,14 @@ func Install(content embed.FS) {
 	if flags.Sqlc {
 		fileNames := []string{"sqlc.yaml", "README.md"}
 		srcDir := "feature/sqlc"
-		os.CopyEmbedFiles(content, fileNames, srcDir, flags.Project)
+		destDir := filepath.Join(flags.Project, "sqlc")
+		os.CopyEmbedFiles(content, fileNames, srcDir, destDir)
 
 		srcFile := filepath.Join("feature/sqlc", "makefile")
 		destFile := filepath.Join(flags.Project, "makefile")
 		os.MergeEmbedFile(content, makefile.Keywords, srcFile, destFile)
 
+		os.Mkdir(os.GetPath(flags.Project, "sqlc/db"))
 		os.Mkdir(os.GetPath(flags.Project, "sqlc/query"))
 	}
 }
