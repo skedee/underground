@@ -21,16 +21,19 @@ include ./.makefile/common.mk
 # @include-post$
 
 # @target@
-docs-serve: ## serve docsify
-	echo "Starting docsify"
-	docsify serve .
+docs: ## serve docsify
+	@docsify serve . && \
+	{ \
+		printf "❌ $(RED)Error Starting docsify$(NC)\n"; \
+		printf "	🔹 $(YELLOW)Try running `docs-setup`.$(NC)\n"; \
+	}
 
 docs-setup: ## setup docsify
 	@echo "npm i docsify-cli"
 	sudo npm i docsify-cli -g
 	
 about: ## display about
-	@sed -n '3p' README.md
+	@sed -n '1p' README.md | tr -d '#'
 		
 help:
 	$(call PRINT_MENU, "root")
